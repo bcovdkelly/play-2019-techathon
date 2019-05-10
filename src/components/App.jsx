@@ -2,6 +2,7 @@ import './App.css';
 import React, { Component } from 'react';
 import VideoDropdown from './VideoDropdown';
 import BrightcovePlayer from './BrightcovePlayer';
+import Analytics from './Analytics';
 
 export default class App extends Component {
   state = {
@@ -13,10 +14,17 @@ export default class App extends Component {
   };
 
   render () {
+    const { video } = this.state;
+
     return (
       <div className='App'>
         <VideoDropdown onVideoChange={this.handleVideoChange} />
-        <BrightcovePlayer videoId={this.state.video && this.state.video.id} />
+        {video && (
+          <React.Fragment>
+            <BrightcovePlayer videoId={video && video.id} />
+            <Analytics video={video} />
+          </React.Fragment>
+        )}
       </div>
     );
   }

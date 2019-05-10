@@ -7,20 +7,24 @@ import Player from '@brightcove/react-player-loader';
 
 class BrightcovePlayer extends Component {
   static propTypes = {
-    videoId: PropTypes.string
+    videoId: PropTypes.string.isRequired
   }
 
   shouldComponentUpdate (nextProps) {
     return this.props.videoId !== nextProps.videoId;
   }
 
-  componentDidUpdate (prevProps) {
-    this.playerRef.catalog.getVideo(this.props.videoId, (error, video) => {
-      if (error) {
-        return console.error('error', error);
+  loadVideo = () => {
+    this.playerRef.catalog.getVideo(this.props.videoId, (err, data) => {
+      if (err) {
+        return console.error('error', err);
       }
-      this.playerRef.catalog.load(video);
+      this.playerRef.catalog.load(data);
     });
+  }
+
+  componentDidUpdate (prevProps) {
+    this.loadVideo();
   }
 
   // This is provided to the `onSuccess` prop of `Player`
@@ -29,11 +33,7 @@ class BrightcovePlayer extends Component {
     this.playerRef = ref;
 
     // call load using the videoId provided via the prop `selectedVideo`
-    if (this.props.videoId) {
-      this.playerRef.catalog.load({
-        sources: [this.props.videoId]
-      });
-    }
+    this.loadVideo();
   };
 
   render () {

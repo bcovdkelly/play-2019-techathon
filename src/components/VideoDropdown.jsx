@@ -31,6 +31,7 @@ class VideoDropdown extends Component {
       .then((videos) => {
         console.log('video response', videos);
         this.setState({ videos });
+        this.props.onVideoChange(videos[0]);
       });
   }
 
